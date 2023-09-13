@@ -111,26 +111,58 @@
 
         let score = 0;
 
+        // function createPlatform() {
+        //     const lastPlatform = platforms[platforms.length - 1] || { y: canvas.height };
+        //     const minDistance = 40;  // Minimum distance from the last platform
+        //     const maxDistance = 70; // Maximum distance from the last platform
+
+        //     // Randomly decide the Y position within the min and max range from the last platform
+        //     const yPosition = lastPlatform.y - minDistance - Math.random() * (maxDistance - minDistance);
+        //     const randomWidth = player.radius * 2 + Math.random() * (100 - player.radius * 2);
+
+        //     const platform = {
+        //         x: Math.random() * (canvas.width - 200),
+        //         y: yPosition,
+        //         width: randomWidth,
+        //         height: 10,
+        //         touched: false,
+        //         jumpCount: 0
+        //     };
+        //     platforms.push(platform);
+        // }
         function createPlatform() {
-            const lastPlatform = platforms[platforms.length - 1] || { y: canvas.height };
-            const minDistance = 40;  // Minimum distance from the last platform
-            const maxDistance = 70; // Maximum distance from the last platform
+    if (platforms.length === 0) {
+        // This is the first platform
+        platforms.push({
+            x: canvas.width - 300,  // You can set these values according to what looks good
+            y: canvas.height - 150,
+            width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
+            height: 10,
+            touched: false,
+            jumpCount: 0
+        });
+    } else {
+        // For all other platforms
+        const lastPlatform = platforms[platforms.length - 1];
+        const minDistance = 40;  // Minimum distance from the last platform
+        const maxDistance = 70;  // Maximum distance from the last platform
 
-            // Randomly decide the Y position within the min and max range from the last platform
-            const yPosition = lastPlatform.y - minDistance - Math.random() * (maxDistance - minDistance);
-            const randomWidth = player.radius * 2 + Math.random() * (100 - player.radius * 2);
+        // Randomly decide the Y position within the min and max range from the last platform
+        const yPosition = lastPlatform.y - minDistance - Math.random() * (maxDistance - minDistance);
+        const randomWidth = player.radius * 2 + Math.random() * (100 - player.radius * 2);
 
-            const platform = {
-                x: Math.random() * (canvas.width - 200),
-                y: yPosition,
-                width: randomWidth,
-                height: 10,
-                touched: false,
-                jumpCount: 0
-            };
-            platforms.push(platform);
-        }
-  
+        const platform = {
+            x: Math.random() * (canvas.width - 200),
+            y: yPosition,
+            width: randomWidth,
+            height: 10,
+            touched: false,
+            jumpCount: 0
+        };
+        platforms.push(platform);
+    }
+}
+
 
         function jump() {
     if (player.jumps < player.maxJumps) {
