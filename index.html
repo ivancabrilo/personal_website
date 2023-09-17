@@ -186,9 +186,9 @@
         function jump() {
     if (player.jumps < player.maxJumps) {
         if (player.jumps === 0) { 
-            player.dy = -12;  // First jump
+            player.dy = -13;  // First jump
         } else {
-            player.dy = -5 - Math.random() * 10;  // Second jump 
+            player.dy = -7 - Math.random() * 9;  // Second jump 
         }
         player.jumping = true;
         player.jumps++; // Increase the number of jumps to 2
