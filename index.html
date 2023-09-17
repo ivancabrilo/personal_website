@@ -202,11 +202,12 @@ function flashScoreboard() {
 platforms = platforms.filter(platform => platform.y < canvas.height);
 
 document.addEventListener('keydown', function(event) {
-    if (event.key === "w" && player.jumps < player.maxJumps) {
+    const key = event.key.toLowerCase();
+    if (key === "w" && player.jumps < player.maxJumps) {
         jump();
-    } else if (event.key === "a") {
+    } else if (key === "a") {
         player.dx = -5;
-    } else if (event.key === "d") {
+    } else if (key === "d") {
         player.dx = 5;
     }
 });
@@ -230,11 +231,12 @@ function drawBackground() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-        document.addEventListener('keyup', function(event) {
-            if (event.key === "a" || event.key === "d") {
-                player.dx = 0;
-            }
-        });
+       document.addEventListener('keyup', function(event) {
+    const key = event.key.toLowerCase();
+    if (key === "a" || key === "d") {
+        player.dx = 0;
+    }
+});
         
         document.getElementById('aboutMeButton').addEventListener('click', function() {
     window.location.href = "personal.html";
