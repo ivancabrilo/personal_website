@@ -282,25 +282,6 @@ function draw() {
     ctx.fillStyle = "#50C878";
   }
 
-  //   // Set font, stroke, and shadow effects
-  //   ctx.font = '25px "Press Start 2P"'; // Font
-  //   ctx.strokeStyle = "#FFC300"; // Add stroke for a cool effect
-  //   ctx.lineWidth = 2; // Define the width of the stroke
-
-  //   // Add a glow effect (only when not flashing)
-  //   if (flashDuration <= 0) {
-  //     ctx.shadowColor = ""; // Choose a color for the glow
-  //     ctx.shadowBlur = 10; // Define the size of the glow
-  //     ctx.shadowOffsetX = 0; // Horizontal offset
-  //     ctx.shadowOffsetY = 0; // Vertical offset
-  //   }
-
-  //   ctx.fillText(`Score: ${score}`, 10, 30);
-  //   ctx.strokeText(`Score: ${score}`, 10, 30);
-
-  //   ctx.shadowBlur = 0;
-  // }
-  // Base values
   // Base values for MacBook Pro 13-inch Retina Display
   const BASE_SCREEN_WIDTH = 2560;
   const BASE_SCREEN_HEIGHT = 1600;
@@ -343,3 +324,23 @@ document
   .addEventListener("click", function () {
     document.getElementById("instructions").style.display = "none";
   });
+
+//   // Set font, stroke, and shadow effects
+//   ctx.font = '25px "Press Start 2P"'; // Font
+//   ctx.strokeStyle = "#FFC300"; // Add stroke for a cool effect
+//   ctx.lineWidth = 2; // Define the width of the stroke
+
+//   // Add a glow effect (only when not flashing)
+//   if (flashDuration <= 0) {
+//     ctx.shadowColor = ""; // Choose a color for the glow
+//     ctx.shadowBlur = 10; // Define the size of the glow
+//     ctx.shadowOffsetX = 0; // Horizontal offset
+//     ctx.shadowOffsetY = 0; // Vertical offset
+//   }
+
+//   ctx.fillText(`Score: ${score}`, 10, 30);
+//   ctx.strokeText(`Score: ${score}`, 10, 30);
+
+//   ctx.shadowBlur = 0;
+// }
+// Base values
