@@ -1,0 +1,58 @@
+nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: fixed; /* Fix the nav to the viewport */
+  top: 0; /* Align top to the top of the viewport */
+  left: 0; /* Align left to the left of the viewport */
+  background-color: brown;
+  z-index: 1000; /* Ensure the navbar is above other content */
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex; /* Use flexbox to lay out items horizontally */
+}
+
+nav li {
+  margin: 0;
+  padding: 0;
+}
+
+nav li a {
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  color: darkkhaki;
+  border: 1px solid transparent;
+  transition: all 0.3s; /* Smooth transition for hover effect */
+}
+
+nav li a:hover {
+  color: white;
+  background-color: darkolivegreen;
+  border: 4px solid darkslategray;
+}
+
+nav li a.is-current {
+  color: darkolivegreen;
+  background-color: wheat;
+  pointer-events: none;
+  cursor: default;
+}
+
+nav li a.is-current:after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: black;
+  position: absolute;
+  bottom: -1px; /* Adjust to be just below the link */
+  left: 0;
+}
+nav li a.is-current.adjust {
+  border: 4px solid wheat; /* Match the hover state of other buttons */
+}

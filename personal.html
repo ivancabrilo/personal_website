@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="personal.css" />
+    <link rel="stylesheet" type="text/css" href="nav.css" />
+
+    <nav class="menu">
+      <ul>
+        <li><a href="personal.html" class="is-current">Home</a></li>
+        <li><a href="index.html">Game</a></li>
+        <li><a href="p_projects.html">p_Projects</a></li>
+        <!-- <li><a href="photography.html"></a></li> -->
+      </ul>
+    </nav>
     <title>My Portfolio</title>
     <style></style>
   </head>
@@ -41,13 +51,6 @@
     </p>
     <br />
 
-    <div class="highlighted-projects">
-      <h2><strong>My Projects</strong></h2>
-      <button onclick="openPDF()">Research Paper</button>
-      <button onclick="openResume()">Resume</button>
-      <button onclick="openGame()">Snake Game</button>
-    </div>
-
     <h2>About me</h2>
     <p>
       What makes me an interesting person are my excellent social interaction
@@ -80,20 +83,20 @@
         <img src="images/RedHotChiliPeppersCalifornication.jpg" />
       </div>
     </div>
-
     <script>
-      function openPDF() {
-        window.open("Independent Research.pdf", "_blank");
-      }
-      function openResume() {
-        window.open("Resume.Ivan_Cabrilo1.pdf", "_blank");
-      }
-      function openGame() {
-        window.open(
-          "https://github.com/ivancabrilo/snake_game/blob/master/snake.gif",
-          "_blank"
-        );
-      }
+      const navLinks = document.querySelectorAll("nav li a");
+      const currentLink = document.querySelector("nav li a.is-current");
+
+      navLinks.forEach((link) => {
+        link.addEventListener("mouseover", () => {
+          currentLink.classList.add("adjust");
+        });
+
+        link.addEventListener("mouseout", () => {
+          currentLink.classList.remove("adjust");
+        });
+      });
     </script>
+    <footer></footer>
   </body>
 </html>

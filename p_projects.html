@@ -1,0 +1,47 @@
+<link rel="stylesheet" type="text/css" href="personal.css" />
+<link rel="stylesheet" type="text/css" href="nav.css" />
+
+<h1 solid>PAGE IS UNDER CONSTRUCTION 🚧</h1>
+<nav class="menu">
+  <ul>
+    <li><a href="personal.html">Home</a></li>
+    <li><a href="index.html">Game</a></li>
+    <li><a href="p_projects.html" class="is-current">p_Projects</a></li>
+    <!-- <li><a href="photography.html"></a></li> -->
+  </ul>
+</nav>
+
+<div class="highlighted-projects">
+  <h2><strong>My Projects</strong></h2>
+  <button onclick="openPDF()">Research Paper</button>
+  <button onclick="openResume()">Resume</button>
+  <button onclick="openGame()">Snake Game</button>
+</div>
+<script>
+  function openPDF() {
+    window.open("Independent Research.pdf", "_blank");
+  }
+  function openResume() {
+    window.open("Resume.Ivan_Cabrilo1.pdf", "_blank");
+  }
+  function openGame() {
+    window.open(
+      "https://github.com/ivancabrilo/snake_game/blob/master/snake.gif",
+      "_blank"
+    );
+  }
+</script>
+<script>
+  const navLinks = document.querySelectorAll("nav li a");
+  const currentLink = document.querySelector("nav li a.is-current");
+
+  navLinks.forEach((link) => {
+    link.addEventListener("mouseover", () => {
+      currentLink.classList.add("adjust");
+    });
+
+    link.addEventListener("mouseout", () => {
+      currentLink.classList.remove("adjust");
+    });
+  });
+</script>
