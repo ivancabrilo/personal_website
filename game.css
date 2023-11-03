@@ -1,107 +1,107 @@
 #aboutMeButton {
-    position: absolute;
-    top: 15px;  /* Adjust based on your scoreboard's height and position */
-    right: 10px;
-    padding: 5px 15px;
-    background-color: #50C878; /* Same color as your scoreboard for consistency */
-    border: none;
-    border-radius: 5px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    outline: none; /* Remove default outline */
+  position: absolute;
+  top: 15px; /* Adjust based on your scoreboard's height and position */
+  right: 10px;
+  padding: 10px 15px;
+  background-color: #50c878; /* Same color as your scoreboard for consistency */
+  border: none;
+  border-radius: 12px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  outline: none; /* Remove default outline */
 }
 
 #aboutMeButton:hover {
-    background-color: #388E3C;
+  background-color: #388e3c;
 }
 
-
-body, html {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 canvas {
-    background: #e0e0e0;
-    display: block;
-    position: absolute;  /* this will ensure canvas stretches full screen */
-    top: 0;
-    left: 0;
+  background: #e0e0e0;
+  display: block;
+  position: absolute; /* this will ensure canvas stretches full screen */
+  top: 0;
+  left: 0;
 }
 
 #instructions {
-    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-    padding: 20px;
-    border-radius: 5px;
-    position: fixed;  /* or absolute based on your requirement */
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;  /* To ensure it appears on top */
-    width: 80%;  /* or any suitable width */
-    max-width: 400px;  /* setting a max-width for larger screens */
-    text-align: center;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+  padding: 20px;
+  border-radius: 5px;
+  position: fixed; /* or absolute based on your requirement */
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100; /* To ensure it appears on top */
+  width: 80%; /* or any suitable width */
+  max-width: 400px; /* setting a max-width for larger screens */
+  text-align: center;
 }
 .key {
-    display: inline-block;
-    padding: 2px 5px;
-    border: 1px solid #000;
-    border-radius: 3px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);  /* simple shadow for 3D effect */
-    font-family: 'Courier New', Courier, monospace;  /* monospace font for key-like appearance */
-    margin: 0 5px;
-    background-color: #f2f2f2;  /* light grey background */
+  display: inline-block;
+  padding: 2px 5px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2); /* simple shadow for 3D effect */
+  font-family: "Courier New", Courier, monospace; /* monospace font for key-like appearance */
+  margin: 0 5px;
+  background-color: #f2f2f2; /* light grey background */
 }
 
 #keyboard-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
 .key-row {
-    display: flex;
-    justify-content: center;
-    margin: 5px 0;
+  display: flex;
+  justify-content: center;
+  margin: 5px 0;
 }
 
 .key {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid #000;
-    border-radius: 3px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-    font-family: 'Courier New', Courier, monospace;
-    margin: 0 5px;
-    background-color: #f2f2f2;
-    position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  font-family: "Courier New", Courier, monospace;
+  margin: 0 5px;
+  background-color: #f2f2f2;
+  position: relative;
 }
 
 .key[data-action="Jump"]::after {
-    content: attr(data-action);
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
+  content: attr(data-action);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .key[data-action="Move left"]::after,
 .key[data-action="Move right"]::after {
-    content: attr(data-action);
-    position: absolute;
-    bottom: -30px;
+  content: attr(data-action);
+  position: absolute;
+  bottom: -30px;
 }
 
 .key[data-action="Move left"]::after {
-    left: -100%;
+  left: -100%;
 }
 
 .key[data-action="Move right"]::after {
-    right: -100%;
+  right: -100%;
 }
