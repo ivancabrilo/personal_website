@@ -423,8 +423,26 @@ function createPlatform() {
   if (platforms.length === 0) {
     // This is the first platform
     platforms.push({
-      x: canvas.width - 300, // You can set these values according to what looks good
+      x: canvas.width - 450, // You can set these values according to what looks good
       y: canvas.height - 150,
+      width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
+      height: 10,
+      touched: false,
+      jumpCount: 0,
+    });
+  } else if (platforms.length === 1) {
+    platforms.push({
+      x: canvas.width - 700, // You can set these values according to what looks good
+      y: canvas.height - 300,
+      width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
+      height: 10,
+      touched: false,
+      jumpCount: 0,
+    });
+  } else if (platforms.length === 3) {
+    platforms.push({
+      x: canvas.width - 1000, // You can set these values according to what looks good
+      y: canvas.height - 400,
       width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
       height: 10,
       touched: false,
@@ -433,9 +451,9 @@ function createPlatform() {
   } else {
     // For all other platforms
     const lastPlatform = platforms[platforms.length - 1];
-    const minDistance = 40; // Minimum distance from the last platform in y-axis
-    const maxDistance = 120; // Maximum distance from the last platform in y-axis
-    const minGapX = 67; // Minimum gap in x-axis between consecutive platforms
+    const minDistance = 60; // Minimum distance from the last platform in y-axis
+    const maxDistance = 110; // Maximum distance from the last platform in y-axis
+    const minGapX = 87; // Minimum gap in x-axis between consecutive platforms
 
     // Randomly decide the Y position within the min and max range from the last platform
     const yPosition =
@@ -452,7 +470,7 @@ function createPlatform() {
       x: newX,
       y: yPosition,
       width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
-      height: 10,
+      height: 15,
       touched: false,
       jumpCount: 0,
     };
@@ -463,9 +481,9 @@ function createPlatform() {
 function jump() {
   if (player.jumps < player.maxJumps) {
     if (player.jumps === 0) {
-      player.dy = -13; // First jump
+      player.dy = -14; // First jump
     } else {
-      player.dy = -11 - Math.random() * 7; // Second jump
+      player.dy = -10 - Math.random() * 7; // Second jump
     }
     player.jumping = true;
     player.jumps++; // Increase the number of jumps to 2
@@ -483,9 +501,9 @@ document.addEventListener("keydown", function (event) {
   if (key === "w" && player.jumps < player.maxJumps) {
     jump();
   } else if (key === "a") {
-    player.dx = -5;
+    player.dx = -5.5;
   } else if (key === "d") {
-    player.dx = 5;
+    player.dx = 5.5;
   }
 });
 function drawPyramidPlatform(x, y, width, height) {
@@ -561,7 +579,11 @@ function update() {
           score += 1;
           platform.touched = true; // To add score once per platform
           createPlatform();
-          createPlatform();
+          if (platforms.length > 6) {
+            console.log("hi");
+          } else {
+            createPlatform();
+          }
         }
       }
     }

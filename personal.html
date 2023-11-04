@@ -83,7 +83,7 @@
         <img src="images/RedHotChiliPeppersCalifornication.jpg" />
       </div>
     </div>
-    <script>
+    <!-- <script>
       const navLinks = document.querySelectorAll("nav li a");
       const currentLink = document.querySelector("nav li a.is-current");
 
@@ -96,7 +96,26 @@
           currentLink.classList.remove("adjust");
         });
       });
+    </script> -->
+
+    <script>
+      const navLinks = document.querySelectorAll("nav li a");
+      const currentLink = document.querySelector("nav li a.is-current");
+      const navBar = document.querySelector("nav");
+
+      navLinks.forEach((link) => {
+        link.addEventListener("mouseover", () => {
+          currentLink.classList.add("adjust");
+          navBar.style.setProperty("--hover-bottom-position", "3px"); // Add this line to adjust the position
+        });
+
+        link.addEventListener("mouseout", () => {
+          currentLink.classList.remove("adjust");
+          navBar.style.setProperty("--hover-bottom-position", "0px"); // And this one to reset it
+        });
+      });
     </script>
+
     <footer></footer>
   </body>
 </html>
