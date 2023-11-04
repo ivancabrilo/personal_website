@@ -67,53 +67,107 @@ let platforms = [];
 
 let score = 0;
 
-function createPlatform() {
-  if (platforms.length === 0) {
-    // This is the first platform
-    platforms.push({
-      x: canvas.width - 300, // You can set these values according to what looks good
-      y: canvas.height - 150,
-      width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
-      height: 10,
-      touched: false,
-      jumpCount: 0,
-    });
-  } else {
-    // For all other platforms
-    const lastPlatform = platforms[platforms.length - 1];
-    const minDistance = 40; // Minimum distance from the last platform in y-axis
-    const maxDistance = 120; // Maximum distance from the last platform in y-axis
-    const minGapX = 67; // Minimum gap in x-axis between consecutive platforms
+// function createPlatform() {
+//   if (platforms.length === 0) {
+//     // This is the first platform
+//     platforms.push({
+//       x: canvas.width - 300, // You can set these values according to what looks good
+//       y: canvas.height - 150,
+//       width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
+//       height: 10,
+//       touched: false,
+//       jumpCount: 0,
+//     });
+//   } else {
+//     // For all other platforms
+//     const lastPlatform = platforms[platforms.length - 1];
+//     const minDistance = 40; // Minimum distance from the last platform in y-axis
+//     const maxDistance = 120; // Maximum distance from the last platform in y-axis
+//     const minGapX = 67; // Minimum gap in x-axis between consecutive platforms
 
-    // Randomly decide the Y position within the min and max range from the last platform
-    const yPosition =
-      lastPlatform.y -
-      minDistance -
-      Math.random() * (maxDistance - minDistance);
-    let newX;
+//     // Randomly decide the Y position within the min and max range from the last platform
+//     const yPosition =
+//       lastPlatform.y -
+//       minDistance -
+//       Math.random() * (maxDistance - minDistance);
+//     let newX;
 
-    do {
-      newX = Math.random() * (canvas.width - 300);
-    } while (Math.abs(newX - lastPlatform.x) < minGapX); // Ensure at least minGapX difference on the x-axis
+//     do {
+//       newX = Math.random() * (canvas.width - 300);
+//     } while (Math.abs(newX - lastPlatform.x) < minGapX); // Ensure at least minGapX difference on the x-axis
 
-    const platform = {
-      x: newX,
-      y: yPosition,
-      width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
-      height: 10,
-      touched: false,
-      jumpCount: 0,
-    };
-    platforms.push(platform);
-  }
+//     const platform = {
+//       x: newX,
+//       y: yPosition,
+//       width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
+//       height: 10,
+//       touched: false,
+//       jumpCount: 0,
+//     };
+//     platforms.push(platform);
+//   }
+// }
+
+// Assuming a base resolution of 2560x1600 for a 13.3-inch MacBook Pro.
+const baseWidth = 2560; // Replace with your actual base width
+const baseHeight = 1600; // Replace with your actual base height
+
+// Convert pixel values to percentages
+function pixelsToPercentX(pixels) {
+  return (pixels / baseWidth) * 100;
 }
+
+function pixelsToPercentY(pixels) {
+  return (pixels / baseHeight) * 100;
+}
+
+// For the first platform
+platforms.push({
+  x: pixelsToPercentX(canvas.width - 300), // This becomes a percentage of the base width
+  y: pixelsToPercentY(canvas.height - 150), // This becomes a percentage of the base height
+  width: pixelsToPercentX(
+    player.radius * 2 + Math.random() * (100 - player.radius * 2)
+  ), // Width as a percentage
+  height: pixelsToPercentY(10), // Height as a percentage
+  touched: false,
+  jumpCount: 0,
+});
+
+// For subsequent platforms
+const yPosition = pixelsToPercentY(
+  lastPlatform.y -
+    pixelsToPercentY(minDistance) -
+    Math.random() *
+      (pixelsToPercentY(maxDistance) - pixelsToPercentY(minDistance))
+);
+
+let newX;
+do {
+  newX = pixelsToPercentX(Math.random() * (canvas.width - 300));
+} while (
+  Math.abs(newX - pixelsToPercentX(lastPlatform.x)) < pixelsToPercentX(minGapX)
+);
+
+const platform = {
+  x: newX, // X position as a percentage
+  y: yPosition, // Y position as a percentage
+  width: pixelsToPercentX(
+    player.radius * 2 + Math.random() * (100 - player.radius * 2)
+  ), // Width as a percentage
+  height: pixelsToPercentY(10), // Height as a percentage
+  touched: false,
+  jumpCount: 0,
+};
+
+platforms.push(platform);
 
 function jump() {
   if (player.jumps < player.maxJumps) {
     if (player.jumps === 0) {
-      player.dy = -13; // First jump
+      player.dy = -15; // First jump
     } else {
-      player.dy = -7 - Math.random() * 9; // Second jump
+      d;
+      player.dy = -14 - Math.random() * 9; // Second jump
     }
     player.jumping = true;
     player.jumps++; // Increase the number of jumps to 2
