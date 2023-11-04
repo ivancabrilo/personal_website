@@ -465,7 +465,7 @@ function jump() {
     if (player.jumps === 0) {
       player.dy = -13; // First jump
     } else {
-      player.dy = -7 - Math.random() * 9; // Second jump
+      player.dy = -11 - Math.random() * 7; // Second jump
     }
     player.jumping = true;
     player.jumps++; // Increase the number of jumps to 2
