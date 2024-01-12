@@ -423,7 +423,7 @@ function createPlatform() {
   if (platforms.length === 0) {
     // This is the first platform
     platforms.push({
-      x: canvas.width - 450, // You can set these values according to what looks good
+      x: canvas.width - 450, 
       y: canvas.height - 150,
       width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
       height: 10,
