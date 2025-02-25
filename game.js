@@ -9,14 +9,14 @@ window.addEventListener("resize", function () {
   canvas.height = window.innerHeight;
   const scaleFactor = canvas.height / previousHeight;
 
-  // Adjustment the player's Y-position
+  // adjustment the player's Y-position
   player.y *= scaleFactor;
 
-  // Adjustment to platforms' Y-positions
+  // adjustment to platforms' Y-positions
   platforms.forEach((platform) => {
     platform.y *= scaleFactor;
 
-    // To make platform not go below the canvas
+    // ensures that platform not go below the canvas
     if (platform.y + platform.height > canvas.height) {
       platform.y = canvas.height - platform.height;
     }
@@ -36,14 +36,14 @@ function toggleFullscreen() {
   setTimeout(function () {
     const scaleFactor = canvas.height / previousHeight;
 
-    // Adjustment to player's Y-position
+    // changes to player's Y-position
     player.y *= scaleFactor;
 
-    // Adjusttment to platforms' Y-positions
+    // Adjust to platforms' Y-positions
     platforms.forEach((platform) => {
       platform.y *= scaleFactor;
 
-      // Ensure platform doesn't go below the canvas
+      // ---> platform doesn't go below the canvas
       if (platform.y + platform.height > canvas.height) {
         platform.y = canvas.height - platform.height;
       }
@@ -69,7 +69,7 @@ let score = 0;
 
 function createPlatform() {
   if (platforms.length === 0) {
-    // This is the first platform
+    // First platform
     platforms.push({
       x: canvas.width - 450, 
       y: canvas.height - 150,
@@ -80,7 +80,7 @@ function createPlatform() {
     });
   } else if (platforms.length === 1) {
     platforms.push({
-      x: canvas.width - 700, // You can set these values according to what looks good
+      x: canvas.width - 700, 
       y: canvas.height - 300,
       width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
       height: 10,
@@ -89,7 +89,7 @@ function createPlatform() {
     });
   } else if (platforms.length === 3) {
     platforms.push({
-      x: canvas.width - 1000, // You can set these values according to what looks good
+      x: canvas.width - 1000, 
       y: canvas.height - 400,
       width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
       height: 10,
@@ -99,9 +99,9 @@ function createPlatform() {
   } else {
     // For all other platforms
     const lastPlatform = platforms[platforms.length - 1];
-    const minDistance = 60; // Minimum distance from the last platform in y-axis
-    const maxDistance = 110; // Maximum distance from the last platform in y-axis
-    const minGapX = 87; // Minimum gap in x-axis between consecutive platforms
+    const minDistance = 60; // Min dist from the last platform in y-axis
+    const maxDistance = 110; // Max dist from the last platform in y-axis
+    const minGapX = 87; // Min gap in x-axis between consecutive platforms
 
     // Randomly decide the Y position within the min and max range from the last platform
     const yPosition =
@@ -225,7 +225,7 @@ function update() {
         player.jumps = 0;
         if (!platform.touched) {
           score += 1;
-          platform.touched = true; // To add score once per platform
+          platform.touched = true; // add score once per platform
           createPlatform();
           if (platforms.length > 6) {
             console.log("hi");
@@ -304,16 +304,15 @@ function draw() {
     ctx.fillStyle = "#50C878";
   }
 
-  // Base values for MacBook Pro 13-inch Retina Display
   const BASE_SCREEN_WIDTH = 2560;
   const BASE_SCREEN_HEIGHT = 1600;
   const BASE_FONT_SIZE = 55;
 
-  // Calculate scale factors
+  //  scale factors
   let widthScaleFactor = window.innerWidth / BASE_SCREEN_WIDTH;
   let heightScaleFactor = window.innerHeight / BASE_SCREEN_HEIGHT;
 
-  // Use the average of the width and height scale factors as the overall scale factor
+  // average of the width and height scale factors as the overall scale factor
   let overallScaleFactor = (widthScaleFactor + heightScaleFactor) / 2;
 
   // Calculate responsive font size
@@ -321,7 +320,7 @@ function draw() {
 
   // Set font, stroke, and shadow effects
   ctx.font = `${responsiveFontSize}px "Press Start 2P"`; // Responsive Font
-  ctx.strokeStyle = "#FFC300"; // Add stroke for a cool effect
+  ctx.strokeStyle = "#FFC300"; // cool stroke effect 
   ctx.lineWidth = 2; // Define the width of the stroke
 
   // Add a glow effect (only when not flashing)
@@ -346,10 +345,3 @@ document
   .addEventListener("click", function () {
     document.getElementById("instructions").style.display = "none";
   });
-//           });
-//       })()}
-//     </div>
-//   );
-// }
-
-// export default Testing;

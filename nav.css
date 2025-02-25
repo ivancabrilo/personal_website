@@ -2,11 +2,11 @@ nav {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  position: fixed; /* Fix the nav to the viewport */
-  top: 0; /* Align top to the top of the viewport */
-  left: 0; /* Align left to the left of the viewport */
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: brown;
-  z-index: 1000; /* Ensure the navbar is above other content */
+  z-index: 1000; 
 
   overflow: hidden;
 }
@@ -15,7 +15,7 @@ nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  display: flex; /* Use flexbox to lay out items horizontally */
+  display: flex; 
 }
 
 nav li {
@@ -29,8 +29,8 @@ nav li a {
   display: block;
   color: darkkhaki;
   border: 1px solid transparent;
-  transform: scale(1); /* Initialize scale */
-  transition: transform 0.3s, color 0.3s, background-color 0.3s; /* Specify transitions */
+  transform: scale(1);
+  transition: transform 0.3s, color 0.3s, background-color 0.3s; 
 }
 
 nav li a:hover {
@@ -59,9 +59,9 @@ nav::after {
   right: 0;
   bottom: 0;
   height: 3px;
-  background-color: black; /* This creates the black line at the bottom */
+  background-color: black; 
   transition: bottom 0.3s; /* Animate the bottom property */
 }
 nav li a:hover::after {
-  bottom: -3px; /* Pushes the pseudo-element down by the thickness of the border */
+  bottom: -3px; /* move the pseudo-element down by the thickness of the border */
 }
