@@ -1,50 +1,3 @@
-<!-- <link rel="stylesheet" type="text/css" href="personal.css" />
-<link rel="stylesheet" type="text/css" href="nav.css" />
-<title>📽️</title>
-<h1 solid>PAGE IS UNDER CONSTRUCTION 🚧</h1>
-<nav class="menu">
-  <ul>
-    <li><a href="personal.html">Home</a></li>
-    <li><a href="index.html">Game</a></li>
-    <li><a href="projects.html" class="is-current">Projects</a></li>
-  
-  </ul>
-</nav>
-
-<div class="highlighted-projects">
-  <h2><strong>My Projects</strong></h2>
-  <button onclick="openSorriso">Start-Up</button>
-  <button onclick="openResume()">Resume</button>
-  <button onclick="openGame()">Snake Game</button>
-</div>
-<script>
-  function openResume() {
-    window.open("Resume.Ivan_Cabrilo.pdf", "_blank");
-  }
-  function openSorriso() {
-    window.open("https://sorriso.care/", "_blank");
-  }
-  function openGame() {
-    window.open(
-      "https://github.com/ivancabrilo/snake_game/blob/master/snake.gif",
-      "_blank"
-    );
-  }
-</script>
-<script>
-  const navLinks = document.querySelectorAll("nav li a");
-  const currentLink = document.querySelector("nav li a.is-current");
-
-  navLinks.forEach((link) => {
-    link.addEventListener("mouseover", () => {
-      currentLink.classList.add("adjust");
-    });
-
-    link.addEventListener("mouseout", () => {
-      currentLink.classList.remove("adjust");
-    });
-  });
-</script> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,23 +6,137 @@
     <link rel="stylesheet" type="text/css" href="personal.css">
     <link rel="stylesheet" type="text/css" href="nav.css">
     <title>📽️</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            margin-top: 20px;
+            color: #333;
+        }
+        .menu {
+            background-color: #222;
+            padding: 10px;
+        }
+        .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .menu ul li {
+            margin: 0 15px;
+        }
+        .menu ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            transition: 0.3s;
+        }
+        .menu ul li a:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+        .highlighted-projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 30px auto;
+    align-items: start; /*  cards align at the top */
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column; /* stacking elements properly */
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.project-card:hover {
+    transform: scale(1.05);
+}
+
+.project-card img {
+    width: 100%;
+    height: auto; /* rmove  white space */
+    object-fit: cover; /*  image maintains aspect ratio */
+    display: block;
+}
+
+.project-card .content {
+    padding: 15px;
+    flex-grow: 1; /* fill available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.project-card button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #222;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+    margin-top: auto; 
+}
+
+.project-card button:hover {
+    background-color: #444;
+}
+.head{
+    color: #444;
+}
+    </style>
 </head>
 <body>
-    <h1>PAGE IS UNDER CONSTRUCTION 🚧</h1>
+   <h1>My projects</h1>
     <nav class="menu">
         <ul>
             <li><a href="personal.html">Home</a></li>
             <li><a href="index.html">Game</a></li>
             <li><a href="projects.html" class="is-current">Projects</a></li>
-            <!-- <li><a href="photography.html"></a></li> -->
         </ul>
     </nav>
 
     <div class="highlighted-projects">
-        <h2><strong>My Projects</strong></h2>
-        <button onclick="openSorriso()">Start-Up</button>
-        <button onclick="openResume()">Resume</button>
-        <button onclick="openGame()">Snake Game</button>
+        <div class="project-card">
+            <h3 class="head">Start-Up</h3>
+            <img src="images/startup.png" alt="Start-Up">
+            <div class="content">
+       
+                <button onclick="openSorriso()">Visit</button>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <h3 class="head">Resume</h3>
+            <img src="images/resume.png" alt="Resume">
+            <div class="content">
+                
+                <button onclick="openResume()">View</button>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <h3 class="head">Bouldering Project</h3>
+            <img src="images/readme.gif" alt="Snake Game">
+            <div class="content">
+                
+                <button onclick="openGame()">View</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -80,24 +147,9 @@
             window.open("https://sorriso.care/", "_blank");
         }
         function openGame() {
-            window.open(
-                "https://github.com/ivancabrilo/snake_game/blob/master/snake.gif",
-                "_blank"
-            );
+            window.open("https://github.com/ivancabrilo/PoseEstimationProject", "_blank")
+            // window.open("https://github.com/ivancabrilo/snake_game/blob/master/snake.gif", "_blank");
         }
-
-        const navLinks = document.querySelectorAll("nav li a");
-        const currentLink = document.querySelector("nav li a.is-current");
-
-        navLinks.forEach((link) => {
-            link.addEventListener("mouseover", () => {
-                currentLink.classList.add("adjust");
-            });
-
-            link.addEventListener("mouseout", () => {
-                currentLink.classList.remove("adjust");
-            });
-        });
     </script>
 </body>
 </html>
