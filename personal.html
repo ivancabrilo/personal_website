@@ -1,107 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="personal.css" />
-    <link rel="stylesheet" type="text/css" href="nav.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <nav class="menu">
-      <ul>
-        <li><a href="personal.html" class="is-current">Home</a></li>
-        <li><a href="index.html">Game</a></li>
-        <li><a href="projects.html">Projects</a></li>
-      </ul>
-    </nav>
-    <title>iWebsite</title>
-    <style></style>
-  </head>
-  <body>
-    <h1>Welcome to My Personal Website!</h1>
-
-    <div class="images">
-      <div class="image-box">
-        <img src="images/egypt.webp" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7ecd9">
+  <meta name="description" content="Iván Cabrilo — traveling, science, history, and a future exploring the human past with mechatronics and machine learning.">
+  <title>Home · Ivan Cabrilo</title>
+  <link rel="stylesheet" href="personal.css">
+  <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header container">
+    <nav class="menu" aria-label="Main navigation"><ul>
+      <li><a href="personal.html" aria-current="page">Home</a></li>
+      <li><a href="index.html">Game</a></li>
+      <li><a class="linkedin-link" href="https://www.linkedin.com/in/ivan-cabrilo/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></li>
+    </ul></nav>
+  </header>
+  <main id="main" class="container" tabindex="-1">
+    <section class="landing" aria-labelledby="intro-title">
+      <div class="intro">
+        <h1 id="intro-title">Hi, I'm Iván.</h1>
+        <p class="lead">I love traveling, science, and history.</p>
+        <p>I plan to use mechatronics and machine learning one day to explore archaeological sites and discover the human past.</p>
       </div>
-      <div class="image-box">
-        <img src="images/moon.webp" />
-      </div>
-      <div class="image-box">
-        <img src="images/spain.webp" />
-      </div>
-    </div>
-
-    <p>
-      Hi! I'm Iván, a 21-year-old passionate about
-      <br>
-     ML and Theory of Computation.
-    </p>
-    
-    <h2>My Journey</h2>
-    <p>
-      Born on August 7, 2003, I left my home country 🇲🇪 in 2019 to study in Germany 🇩🇪. After an incredible year, I continued my education at UWCiM (IB diploma) in Bosnia & Herzegovina 🇧🇦, where I formed lifelong friendships in a diverse community (+60 nationalities). My journey then led me to the University of Rochester 🇺🇸 on a full-ride scholarship.
-    </p>
-    
-    <h2>About Me</h2>
-    <p>
-      Fluent in four languages 🇷🇸🇬🇧🇩🇪🇪🇸, I'm an adventurous traveler and natural communicator. My extroverted nature helps me connect with people everywhere I go.
-    </p>
-    <p>
-      I'm a half-marathon runner and a sports enthusiast who loves both playing and watching ⚽🎾🥏🏀🏐.
-    </p>
-    <p>
-      Music is a huge part of my life—I listen to it 70% of the day. My favorite genres: Rap, House, Rock, and Punk.
-    </p>
-    
-
-    <h2>Favorite Book & Album</h2>
-
-    <div class="favorites">
-        <div class="special-image-box">
-            <img src="images/book.webp" />
-        </div>
-        <div class="special-image-box">
-            <img src="images/stadium_RHCP.jpg" />
-        </div>
-    </div>
-    
-  
-
-    <script>
-      const navLinks = document.querySelectorAll("nav li a");
-      const currentLink = document.querySelector("nav li a.is-current");
-      const navBar = document.querySelector("nav");
-
-      navLinks.forEach((link) => {
-        link.addEventListener("mouseover", () => {
-          currentLink.classList.add("adjust");
-          navBar.style.setProperty("--hover-bottom-position", "3px");
-        });
-
-        link.addEventListener("mouseout", () => {
-          currentLink.classList.remove("adjust");
-          navBar.style.setProperty("--hover-bottom-position", "0px");
-        });
-      });
-    </script>
-
-
-
-
-
-
-  </body>
-  <footer>
-    <div class="footer-container">
-        <p>Wanna get in touch? Let's connect:</p>
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/ivan-cabrilo/" target="_blank">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a href="https://github.com/ivancabrilo" target="_blank">
-                <i class="fab fa-github"></i>
-            </a>
-        </div>
-    </div>
-  </footer>
+      <figure class="hero-art"><img src="images/volcano-lookout.png" alt="Retro illustration of a traveler relaxing at a lookout above the clouds, facing an erupting volcano." width="941" height="1672" fetchpriority="high"><figcaption>Volcan de Fuego, Guatemala</figcaption></figure>
+    </section>
+  </main>
+  <footer class="container site-footer"><span>Iván Cabrilo</span><a href="https://github.com/ivancabrilo" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></footer>
+</body>
 </html>

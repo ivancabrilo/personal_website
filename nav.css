@@ -1,67 +1,10 @@
-nav {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: brown;
-  z-index: 1000; 
-
-  overflow: hidden;
-}
-
-nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex; 
-}
-
-nav li {
-  margin: 0;
-  padding: 0;
-}
-
-nav li a {
-  text-decoration: none;
-  padding: 10px 15px;
-  display: block;
-  color: darkkhaki;
-  border: 1px solid transparent;
-  transform: scale(1);
-  transition: transform 0.3s, color 0.3s, background-color 0.3s; 
-}
-
-nav li a:hover {
-  color: white;
-  background-color: darkolivegreen;
-  border: 3px solid darkslategray;
-  transform: scale(1.05); /* Increase scale slightly */
-}
-
-nav li a.is-current {
-  color: darkolivegreen;
-  background-color: rgb(227, 196, 138);
-  pointer-events: none;
-  cursor: default;
-}
-
-nav li a.is-current.adjust {
-  border: 3px solid rgb(227, 196, 138);
-}
-
-nav::after {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  background-color: black; 
-  transition: bottom 0.3s; /* Animate the bottom property */
-}
-nav li a:hover::after {
-  bottom: -3px; /* move the pseudo-element down by the thickness of the border */
-}
+/* Shared navigation works without JavaScript or a collapsed mobile menu. */
+.skip-link { position: fixed; top: 8px; left: 12px; transform: translateY(-160%); z-index: 100; background: #50c878; color: #17344c; padding: 12px 18px; border-radius: 8px; }
+.skip-link:focus { transform: translateY(0); }
+.site-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; padding-block: 20px; }
+.site-brand { font-weight: 800; letter-spacing: -.035em; font-size: 21px; min-height: 44px; display: inline-flex; align-items: center; }
+.menu ul { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; list-style: none; padding: 0; margin: 0; }
+.menu a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 16px; border-radius: 30px; font-size: 14px; text-decoration: none; color: #37586d; border: 1px solid transparent; }
+.menu a[aria-current="page"] { color: #216139; background: #50c87810; border-color: #50c8782e; }
+@media (hover: hover) and (pointer: fine) { .menu a:hover { background: #c6945426; color: #17344c; } }
+@media (max-width: 440px) { .site-header { gap: 4px; padding-block: 12px; } .site-header .menu { width: 100%; } .site-header .menu ul { justify-content: space-between; } .site-header .menu li { flex: 1; } .site-header .menu a { width: 100%; } }

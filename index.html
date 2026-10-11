@@ -1,43 +1,30 @@
- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jump Game</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="game.css">
-
-    <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { background: #e0e0e0; display: block; } 
-        
-    </style>
-
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7ecd9">
+  <title>Game · Ivan Cabrilo</title>
+  <link rel="stylesheet" href="game.css">
+  <link rel="stylesheet" href="nav.css">
+  <script src="game-core.js" defer></script>
+  <script src="game.js" defer></script>
 </head>
-
 <body>
-    <div id="instructions">
-        <br>
-        <div id="keyboard-layout">
-            <div class="key-row">
-                <div class="key" data-action="Jump">W</div>
-            </div>
-            <div class="key-row">
-                <div class="key" data-action="Move left">A</div>
-                <div class="key" data-action="Move right">D</div>
-            </div>
-        </div>
-        <br>
-        <p>Double jump exists, but the second one will be of random magnitude.</p>
-        <button id="closeInstructions">Got it!</button>
-    </div>
-    
-    
-    
-    <canvas id="gameCanvas"></canvas>
-    <button id="aboutMeButton">What I built</button>
-
+  <a class="skip-link" href="#gameCanvas">Skip to game</a>
+  <header class="topbar">
+    <span class="game-motto"><strong>- Sky is the limit</strong> </span>
+    <nav class="menu" aria-label="Main navigation"><ul><li><a href="personal.html">Home</a></li><li><a href="index.html" aria-current="page">Game</a></li></ul></nav>
+  </header>
+  <main id="arena" aria-label="Platform jumping game">
+    <canvas id="gameCanvas" tabindex="0" aria-label="Jump between platforms using A and D or arrow keys to move, and W, up arrow or Space to jump. Touch controls are below."></canvas>
+    <div class="hud"><div><small>PLATFORMS</small><strong id="score">00</strong></div><div class="best"><small>BEST</small><strong id="best">00</strong></div></div>
+    <div class="utilities"><button id="pauseButton" aria-label="Pause game">Pause</button><button id="restartButton" aria-label="Restart game">↻</button></div>
+    <section id="instructions" class="overlay" aria-labelledby="panelTitle">
+      <div class="card"><h1 id="panelTitle">Ready to jump?</h1><div id="controlHint"><p class="keyboardHint">Press <kbd>A</kbd> <kbd>D</kbd> to move or <kbd>W</kbd> to jump</p><p class="touchHint">Hold an arrow. Tap Jump.</p></div><p id="panelText">Two jumps. A surprise second boost.</p><button id="closeInstructions" class="primary">Play ↑</button></div>
+    </section>
+    <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
+  </main>
+  <footer class="bottom"><span class="desktopHint">A / D to move <i>·</i> W / Space to jump <i>·</i> Esc to pause</span><div class="touch-controls" aria-label="Game controls"><div class="directions"><button data-action="left" aria-label="Move left">←</button><button data-action="right" aria-label="Move right">→</button></div><button data-action="jump" class="jump">Jump <span aria-hidden="true">↑</span></button></div></footer>
 </body>
-<script src="game.js"></script>
-</html> 
-
-
-
+</html>

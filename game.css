@@ -1,107 +1,100 @@
-#aboutMeButton {
-  position: absolute;
-  top: 15px; 
-  right: 10px;
-  padding: 10px 15px;
-  background-color: #50c878; 
-  border: none;
-  border-radius: 12px;
-  font-family: "Press Start 2P", cursive;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  outline: none; 
+:root { color-scheme: light; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #17344c; background: #f7ecd9; }
+* { box-sizing: border-box; }
+body { margin: 0; height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; cursor: pointer; color: inherit; border: 1px solid #28557130; background: #ffffff60; border-radius: 12px; min-height: 44px; padding: 10px 16px; }
+button:hover { background: #ffffffa0; }
+button:focus-visible, a:focus-visible { outline: 3px solid #50c878; outline-offset: 4px; }
+a { color: inherit; text-decoration: none; }
+.topbar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: max(18px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) 18px max(24px, env(safe-area-inset-left)); }
+.brand { font-weight: 850; font-size: 17px; letter-spacing: .16em; }
+.brand span { display: block; font-size: 11px; color: #416581; letter-spacing: .02em; font-weight: 400; margin-top: 5px; }
+#aboutMeButton { font-size: 13px; padding: 12px 16px; border: 1px solid #28557130; border-radius: 30px; white-space: nowrap; }
+#arena { position: relative; min-height: 0; flex: 1; margin: 0 16px; border: 1px solid #28557140; border-radius: 22px; overflow: hidden; background: linear-gradient(#74b9ff, #ffc300); }
+canvas { width: 100%; height: 100%; display: block; }
+.hud { position: absolute; top: 22px; left: 24px; display: flex; gap: 28px; pointer-events: none; }
+.hud small { display: block; font-size: 9px; font-weight: 700; letter-spacing: .18em; color: #325773; }
+.hud strong { display: block; font-size: 32px; font-weight: 450; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.best { opacity: .65; }
+.utilities { position: absolute; top: 16px; right: 16px; display: flex; gap: 6px; }
+.utilities button { background: #ffffffb8; font-size: 12px; padding: 8px 12px; }
+.overlay { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; background: #c4e5ef40; overflow: auto; }
+[hidden] { display: none !important; }
+.card { width: min(100%, 390px); text-align: center; padding: 28px 22px; border-radius: 24px; background: #fff8e8f5; border: 1px solid #87633630; box-shadow: 0 24px 80px #5b663d20; }
+.eyebrow { font-size: 9px; letter-spacing: .16em; color: #247545; font-weight: 700; }
+h1 { font-size: clamp(32px, 6vh, 54px); line-height: 1.03; letter-spacing: -.05em; margin: 18px 0; }
+p { color: #37586d; font-size: 13px; line-height: 1.65; }
+#controlHint { margin: 20px 0; }
+#controlHint p { font-size: 11px; }
+kbd { display: inline-block; padding: 2px 6px; background: #ffffffa0; border: 1px solid #28557130; border-radius: 5px; color: #17344c; }
+.primary { width: 100%; background: #50c878; color: #17344c; font-weight: 750; border: none; margin-top: 8px; }
+.primary:hover { background: #78dea0; }
+.bottom { flex: none; min-height: 56px; padding: 14px max(24px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #456782; }
+i { margin: 0 12px; font-style: normal; opacity: .5; }
+.touch-controls { display: none; width: 100%; justify-content: space-between; gap: 16px; }
+.directions { display: flex; gap: 10px; }
+.touch-controls button { touch-action: none; user-select: none; -webkit-user-select: none; width: 68px; height: 58px; font-size: 25px; }
+.touch-controls .jump { width: 120px; font-size: 16px; font-weight: 750; background: #50c878; color: #17344c; }
+.touch-controls button.pressed { background: #2b9052; color: #17344c; transform: translateY(2px); }
+.touchHint { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (any-pointer: coarse) { .touch-controls { display: flex; } .desktopHint, .footerNote { display: none; } .touchHint { display: block; } .topbar { padding: max(12px, env(safe-area-inset-top)) 16px 12px; } .brand span { display: none; } #arena { margin: 0 8px; border-radius: 16px; } .hud { left: 16px; top: 16px; gap: 18px; } .hud strong { font-size: 26px; } .utilities { right: 10px; top: 12px; } .utilities button { padding: 8px; } .bottom { padding-top: 10px; } }
+@media (max-height: 520px) { .topbar { padding-top: 6px; padding-bottom: 6px; } .brand span { display: none; } .card { padding: 14px; width: min(100%, 540px); } h1 { font-size: 28px; margin: 8px 0; } h1 br { display: none; } #controlHint { margin: 6px 0; } #controlHint p { margin: 4px 0; } .eyebrow { display: none; } .touch-controls button { height: 44px; } .bottom { padding-top: 6px; padding-bottom: max(6px, env(safe-area-inset-bottom)); } }
+@media (max-height: 520px) {
+  .overlay { align-items: start; }
+  .card { margin: auto; }
+  .card p { margin: 6px 0; }
+  #controlHint p { font-size: 10px; }
+}
+@media (max-height: 520px) and (any-pointer: coarse) {
+  #controlHint p:not(.touchHint) { display: none; }
+}
+@media (max-width: 360px) {
+  .hud { gap: 12px; left: 12px; }
+  .hud small { font-size: 7px; }
+  .hud strong { font-size: 22px; }
+  .utilities { gap: 4px; }
+  .utilities button { font-size: 11px; padding: 6px; }
+}
+/* Navigation and input affordances adapt to screen size and pointer capability. */
+.topbar { flex-wrap: wrap; }
+canvas:focus-visible { outline: 3px solid #50c878; outline-offset: -4px; }
+@media (max-width: 440px) {
+  .topbar { gap: 4px; padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: 8px; }
+  .topbar .brand { font-size: 14px; }
+  .topbar .menu { margin-left: auto; }
+  .topbar .menu a { padding: 8px 10px; font-size: 12px; }
+}
+@media (max-width: 350px) { .topbar .brand { font-size: 12px; letter-spacing: .08em; } .topbar .menu a { padding-inline: 8px; } }
+@media (prefers-reduced-motion: reduce) { .touch-controls button.pressed { transform: none; } }
+@media (any-pointer: coarse) { #controlHint p:not(.touchHint) { display: none; } }
+@media (max-height: 650px) and (max-width: 440px) {
+  .card { padding: 18px 16px; }
+  .card .eyebrow { display: none; }
+  .card h1 { font-size: 32px; margin: 10px 0; }
+  .card p { margin: 8px 0; line-height: 1.45; }
+  #controlHint { margin: 12px 0; }
 }
 
-#aboutMeButton:hover {
-  background-color: #388e3c;
+/* Small screens change spacing; touch capability determines the input UI. */
+@media (max-width: 700px) {
+  .topbar { padding: max(10px, env(safe-area-inset-top)) 14px 10px; }
+  .brand span { display: none; }
+  #arena { margin-inline: 8px; border-radius: 16px; }
+  .hud { left: 14px; top: 16px; gap: 16px; }
+  .hud strong { font-size: 26px; }
+  .utilities { top: 12px; right: 10px; gap: 4px; }
+  .utilities button { padding: 8px; }
+  .footerNote { display: none; }
+  .desktopHint { font-size: 10px; }
+  .desktopHint i { margin-inline: 5px; }
 }
+@media (any-pointer: coarse) { .keyboardHint { display: none; } }
+.card { max-width: 350px; padding: 26px; }
+.card h1 { font-size: clamp(26px, 5vw, 34px); margin: 0 0 18px; }
+#controlHint { margin: 14px 0; }
+#controlHint p { font-size: 13px; }
+.card #panelText { font-size: 12px; margin: 12px 0; }
+@media (max-height: 520px) { .card { padding: 16px; } .card h1 { font-size: 26px; margin-bottom: 10px; } #controlHint { margin: 8px 0; } }
 
-body,
-html {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-canvas {
-  background: #e0e0e0;
-  display: block;
-  position: absolute; /* ensures canvas stretches full screen */
-  top: 0;
-  left: 0;
-}
-
-#instructions {
-  background: rgba(255, 255, 255, 0.8); 
-  padding: 20px;
-  border-radius: 5px;
-  position: fixed; 
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100; 
-  width: 80%; 
-  max-width: 400px; 
-  text-align: center;
-}
-.key {
-  display: inline-block;
-  padding: 2px 5px;
-  border: 1px solid #000;
-  border-radius: 3px;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2); /* 3D effect shadow */
-  font-family: "Courier New", Courier, monospace; 
-  margin: 0 5px;
-  background-color: #f2f2f2;
-}
-
-#keyboard-layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-.key-row {
-  display: flex;
-  justify-content: center;
-  margin: 5px 0;
-}
-
-.key {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid #000;
-  border-radius: 3px;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-  font-family: "Courier New", Courier, monospace;
-  margin: 0 5px;
-  background-color: #f2f2f2;
-  position: relative;
-}
-
-.key[data-action="Jump"]::after {
-  content: attr(data-action);
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.key[data-action="Move left"]::after,
-.key[data-action="Move right"]::after {
-  content: attr(data-action);
-  position: absolute;
-  bottom: -30px;
-}
-
-.key[data-action="Move left"]::after {
-  left: -100%;
-}
-
-.key[data-action="Move right"]::after {
-  right: -100%;
-}
+.game-motto { font-size: 11px; color: #416581; letter-spacing: .02em; font-weight: 400; }

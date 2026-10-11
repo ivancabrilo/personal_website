@@ -1,347 +1,182 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-window.addEventListener("resize", function () {
-  const previousHeight = canvas.height;
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const scaleFactor = canvas.height / previousHeight;
-
-  // adjustment the player's Y-position
-  player.y *= scaleFactor;
-
-  // adjustment to platforms' Y-positions
-  platforms.forEach((platform) => {
-    platform.y *= scaleFactor;
-
-    // ensures that platform not go below the canvas
-    if (platform.y + platform.height > canvas.height) {
-      platform.y = canvas.height - platform.height;
-    }
-  });
-});
-
-canvas.addEventListener("click", toggleFullscreen);
-
-function toggleFullscreen() {
-  const previousHeight = canvas.height;
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  } else {
-    document.documentElement.requestFullscreen();
+(() => {
+  'use strict';
+  const { WIDTH, HEIGHT, STEP, createGame, reset, jump, update } = JumpGame;
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const game = createGame();
+  const panel = document.getElementById('instructions');
+  const startButton = document.getElementById('closeInstructions');
+  const pauseButton = document.getElementById('pauseButton');
+  const keys = new Set(), pointers = new Map();
+  const controlButtons = [...document.querySelectorAll('[data-action]')];
+  let running = false, started = false, frame = 0, lastTime = 0, accumulator = 0;
+  let width = 1, height = 1, scale = 1, offsetX = 0, offsetY = 0, background;
+  let previous = { x: game.player.x, y: game.player.y, camera: game.camera };
+  let displayedScore = -1, displayedBest = -1;
+  try { game.best = Math.max(0, Number(localStorage.getItem('skyward-best')) || 0); } catch (_) { /* Storage may be disabled. */ }
+  function snapshot() { previous = { x: game.player.x, y: game.player.y, camera: game.camera }; }
+  function resize() {
+    const bounds = canvas.getBoundingClientRect();
+    width = Math.max(1, bounds.width); height = Math.max(1, bounds.height);
+    // Keep the backing store bounded on Retina and high-density phones.
+    const dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(3000000 / (width * height)));
+    canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+    ctx.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
+    scale = Math.min(width / WIDTH, height / HEIGHT);
+    offsetX = (width - WIDTH * scale) / 2; offsetY = (height - HEIGHT * scale) / 2;
+    background = ctx.createLinearGradient(0, 0, 0, height);
+    background.addColorStop(0, '#74b9ff'); background.addColorStop(1, '#FFC300');
+    draw(1);
   }
-
-  setTimeout(function () {
-    const scaleFactor = canvas.height / previousHeight;
-
-    // changes to player's Y-position
-    player.y *= scaleFactor;
-
-    // Adjust to platforms' Y-positions
-    platforms.forEach((platform) => {
-      platform.y *= scaleFactor;
-
-      // ---> platform doesn't go below the canvas
-      if (platform.y + platform.height > canvas.height) {
-        platform.y = canvas.height - platform.height;
+  function syncHud() {
+    if (displayedScore !== game.score) {
+      document.getElementById('score').textContent = String(game.score);
+      displayedScore = game.score;
+    }
+    if (displayedBest !== game.best) {
+      document.getElementById('best').textContent = String(game.best).padStart(2, '0');
+      displayedBest = game.best;
+      try { localStorage.setItem('skyward-best', String(game.best)); } catch (_) { /* Optional persistence. */ }
+    }
+  }
+  function draw(alpha) {
+    const x = previous.x + (game.player.x - previous.x) * alpha;
+    const y = previous.y + (game.player.y - previous.y) * alpha;
+    const camera = previous.camera + (game.camera - previous.camera) * alpha;
+    ctx.fillStyle = background; ctx.fillRect(0, 0, width, height);
+    ctx.save(); ctx.translate(offsetX, offsetY); ctx.scale(scale, scale);
+    ctx.beginPath(); ctx.rect(0, 0, WIDTH, HEIGHT); ctx.clip();
+    ctx.strokeStyle = '#000'; ctx.lineWidth = 1;
+    for (const platform of game.platforms) {
+      const py = platform.y - camera;
+      if (py < -20 || py > HEIGHT + 20) continue;
+      // The starting floor is invisible, as in the original game.
+      if (platform.width === WIDTH) continue;
+      const left = platform.x, right = left + platform.width;
+      const apex = left + platform.width * .52, peak = py - 17;
+      // Three warm stone facets keep the original triangular silhouette.
+      ctx.fillStyle = '#896342';
+      ctx.beginPath(); ctx.moveTo(left, py); ctx.lineTo(right, py);
+      ctx.lineTo(right - 5, py + 4); ctx.lineTo(left + 5, py + 4); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#efd1a1';
+      ctx.beginPath(); ctx.moveTo(left, py); ctx.lineTo(apex, peak);
+      ctx.lineTo(apex - 10, py); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#d2a679';
+      ctx.beginPath(); ctx.moveTo(apex - 10, py); ctx.lineTo(apex, peak);
+      ctx.lineTo(right, py); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = '#845c39'; ctx.lineWidth = 1.2; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(left, py); ctx.lineTo(apex, peak);
+      ctx.lineTo(right, py); ctx.closePath(); ctx.stroke();
+      ctx.strokeStyle = '#fff0cc'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(left + 3, py - 1); ctx.lineTo(apex, peak + 1); ctx.stroke();
+    }
+    ctx.translate(x, y - camera);
+    const radius = game.player.radius;
+    ctx.lineWidth = 2; ctx.strokeStyle = '#000'; ctx.fillStyle = '#FFD700';
+    ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, -radius + 8);
+    ctx.lineTo(radius - 8, radius - 8); ctx.lineTo(-radius + 8, radius - 8);
+    ctx.closePath(); ctx.fillStyle = '#D32F2F'; ctx.fill();
+    const offset = radius * .4;
+    for (const [cx, cy, color] of [[0, -offset, '#1976D2'], [-offset, offset, '#388E3C'], [offset, offset, '#8E24AA']]) {
+      ctx.fillStyle = color; ctx.beginPath(); ctx.arc(cx, cy, offset / 2, 0, Math.PI * 2); ctx.fill();
+    }
+    for (let i = 0; i < 2; i++) {
+      ctx.fillStyle = i < 2 - game.player.jumps ? '#FFD700' : '#00000035';
+      ctx.beginPath(); ctx.arc(-5 + i * 10, -26, 2.5, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore(); syncHud();
+  }
+  function clearInput() {
+    keys.clear(); pointers.clear(); game.jumpBuffer = 0;
+    controlButtons.forEach(button => button.classList.remove('pressed'));
+  }
+  function setRunning(value) {
+    running = value; clearInput(); cancelAnimationFrame(frame); lastTime = 0; accumulator = 0; snapshot();
+    panel.hidden = value; pauseButton.textContent = value ? 'Pause' : 'Resume';
+    pauseButton.setAttribute('aria-label', value ? 'Pause game' : 'Resume game');
+    if (value) { started = true; canvas.focus({ preventScroll: true }); frame = requestAnimationFrame(tick); }
+    else {
+      if (started) {
+        document.getElementById('panelTitle').textContent = 'Paused';
+        document.getElementById('panelText').textContent = 'Ready for another jump?';
+        document.getElementById('controlHint').hidden = true;
+        startButton.textContent = 'Resume';
       }
+      draw(1);
+    }
+  }
+  function tick(time) {
+    if (!running) return;
+    const elapsed = lastTime ? Math.min((time - lastTime) / 1000, .1) : 0;
+    lastTime = time; accumulator += elapsed;
+    const active = new Set([...keys, ...pointers.values()]);
+    const axis = Number(active.has('right')) - Number(active.has('left'));
+    while (accumulator >= STEP) {
+      snapshot();
+      if (update(game, axis)) {
+        snapshot();
+        document.getElementById('announcement').textContent = 'Back to the starting platform. Try again!';
+      }
+      accumulator -= STEP;
+    }
+    draw(accumulator / STEP); frame = requestAnimationFrame(tick);
+  }
+  const keyActions = { KeyA: 'left', ArrowLeft: 'left', KeyD: 'right', ArrowRight: 'right', KeyW: 'jump', ArrowUp: 'jump', Space: 'jump' };
+  // Track physical keys individually so releasing A does not release ArrowLeft.
+  const heldCodes = new Set();
+  window.addEventListener('keydown', event => {
+    if (event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+    const control = event.target.closest('[data-action]');
+    if (control && (event.code === 'Space' || event.code === 'Enter')) {
+      if (!running) return;
+      event.preventDefault();
+      keys.add(control.dataset.action);
+      if (control.dataset.action === 'jump' && !event.repeat) jump(game);
+      return;
+    }
+    if (event.target.closest('button, a') && (event.code === 'Space' || event.code === 'Enter')) return;
+    if (event.code === 'Escape' && !event.repeat) { setRunning(!running); heldCodes.clear(); return; }
+    const action = keyActions[event.code];
+    if (!action) return;
+    event.preventDefault();
+    // The starting key also performs its action, without requiring a mouse click.
+    if (!running) {
+      if (event.repeat) return;
+      heldCodes.clear();
+      setRunning(true);
+    }
+    if (heldCodes.has(event.code)) return;
+    heldCodes.add(event.code); keys.add(action);
+    if (action === 'jump') jump(game);
+  });
+  window.addEventListener('keyup', event => {
+    heldCodes.delete(event.code);
+    keys.clear(); heldCodes.forEach(code => keys.add(keyActions[code]));
+  });
+  controlButtons.forEach(button => {
+    button.addEventListener('pointerdown', event => {
+      if (!running || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      event.preventDefault(); button.setPointerCapture(event.pointerId);
+      pointers.set(event.pointerId, button.dataset.action); button.classList.add('pressed');
+      if (button.dataset.action === 'jump') jump(game);
     });
-  }, 100);
-}
-
-let player = {
-  x: canvas.width / 2,
-  y: canvas.height - 50,
-  radius: 20,
-  dy: 0,
-  dx: 0,
-  jumping: false,
-  jumps: 0, // Jumps made
-  maxJumps: 2,
-  justLanded: false,
-};
-
-let platforms = [];
-
-let score = 0;
-
-function createPlatform() {
-  if (platforms.length === 0) {
-    // First platform
-    platforms.push({
-      x: canvas.width - 450, 
-      y: canvas.height - 150,
-      width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
-      height: 10,
-      touched: false,
-      jumpCount: 0,
-    });
-  } else if (platforms.length === 1) {
-    platforms.push({
-      x: canvas.width - 700, 
-      y: canvas.height - 300,
-      width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
-      height: 10,
-      touched: false,
-      jumpCount: 0,
-    });
-  } else if (platforms.length === 3) {
-    platforms.push({
-      x: canvas.width - 1000, 
-      y: canvas.height - 400,
-      width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
-      height: 10,
-      touched: false,
-      jumpCount: 0,
-    });
-  } else {
-    // For all other platforms
-    const lastPlatform = platforms[platforms.length - 1];
-    const minDistance = 60; // Min dist from the last platform in y-axis
-    const maxDistance = 110; // Max dist from the last platform in y-axis
-    const minGapX = 87; // Min gap in x-axis between consecutive platforms
-
-    // Randomly decide the Y position within the min and max range from the last platform
-    const yPosition =
-      lastPlatform.y -
-      minDistance -
-      Math.random() * (maxDistance - minDistance);
-    let newX;
-
-    do {
-      newX = Math.random() * (canvas.width - 300);
-    } while (Math.abs(newX - lastPlatform.x) < minGapX); // Ensure at least minGapX difference on the x-axis
-
-    const platform = {
-      x: newX,
-      y: yPosition,
-      width: player.radius * 2 + Math.random() * (100 - player.radius * 2),
-      height: 15,
-      touched: false,
-      jumpCount: 0,
+    const release = event => {
+      pointers.delete(event.pointerId);
+      if (![...pointers.values()].includes(button.dataset.action)) button.classList.remove('pressed');
     };
-    platforms.push(platform);
-  }
-}
-
-function jump() {
-  if (player.jumps < player.maxJumps) {
-    if (player.jumps === 0) {
-      player.dy = -14; // First jump
-    } else {
-      player.dy = -10 - Math.random() * 7; // Second jump
-    }
-    player.jumping = true;
-    player.jumps++; // Increase the number of jumps to 2
-  }
-}
-let flashDuration = 0;
-
-function flashScoreboard() {
-  flashDuration = 1;
-}
-platforms = platforms.filter((platform) => platform.y < canvas.height);
-
-document.addEventListener("keydown", function (event) {
-  const key = event.key.toLowerCase();
-  if (key === "w" && player.jumps < player.maxJumps) {
-    jump();
-  } else if (key === "a") {
-    player.dx = -5.5;
-  } else if (key === "d") {
-    player.dx = 5.5;
-  }
-});
-function drawPyramidPlatform(x, y, width, height) {
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(x + width / 2, y - height * 1.3);
-  ctx.lineTo(x + width, y);
-  ctx.closePath();
-  ctx.fillStyle = "#D2A679";
-  ctx.fill();
-  ctx.stroke();
-}
-
-function drawBackground() {
-  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, "#74b9ff"); // Top color
-  gradient.addColorStop(1, "#FFC300"); // Bottom color
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-document.addEventListener("keyup", function (event) {
-  const key = event.key.toLowerCase();
-  if (key === "a" || key === "d") {
-    player.dx = 0;
-  }
-});
-
-document.getElementById("aboutMeButton").addEventListener("click", function () {
-  window.location.href = "projects.html";
-});
-
-function update() {
-  player.y += player.dy;
-  player.x += player.dx;
-  player.dy += 0.5;
-
-  // Prevent player from falling through the bottom
-  if (player.y + player.radius > canvas.height) {
-    player.y = canvas.height - player.radius;
-    player.dy = 0;
-    player.jumping = false;
-    player.jumps = 0;
-    if (score > 0) {
-      score = 0;
-      flashScoreboard();
-    }
-  }
-
-  // Prevent player from moving out of canvas horizontally
-  if (player.x - player.radius < 0) {
-    player.x = player.radius;
-  }
-  if (player.x + player.radius > canvas.width) {
-    player.x = canvas.width - player.radius;
-  }
-
-  // Collision detection with platforms
-  for (let platform of platforms) {
-    if (
-      player.y + player.radius > platform.y &&
-      player.y - player.radius < platform.y + platform.height &&
-      player.x + player.radius > platform.x &&
-      player.x - player.radius < platform.x + platform.width
-    ) {
-      if (player.dy > 0) {
-        // Ball is moving downward
-        player.y = platform.y - player.radius;
-        player.dy = 0;
-        player.jumping = false;
-        player.jumps = 0;
-        if (!platform.touched) {
-          score += 1;
-          platform.touched = true; // add score once per platform
-          createPlatform();
-          if (platforms.length > 6) {
-            console.log("hi");
-          } else {
-            createPlatform();
-          }
-        }
-      }
-    }
-  }
-
-  if (player.y < canvas.height / 2) {
-    for (let platform of platforms) {
-      platform.y += 10;
-    }
-    player.y += 10;
-  }
-  platforms = platforms.filter((platform) => platform.y < canvas.height);
-  draw();
-  requestAnimationFrame(update);
-}
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBackground();
-
-  //SVG for the player
-
-  ctx.beginPath();
-  ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-  ctx.fillStyle = "#FFD700";
-  ctx.stroke();
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "black";
-  ctx.fill();
-
-  //  Triangle
-  ctx.beginPath();
-  ctx.moveTo(player.x, player.y - player.radius + 10);
-  ctx.lineTo(player.x + player.radius - 10, player.y + player.radius - 10);
-  ctx.lineTo(player.x - player.radius + 10, player.y + player.radius - 10);
-  ctx.closePath();
-  ctx.fillStyle = "#D32F2F";
-  ctx.fill();
-
-  // Three smaller circles
-  const offset = player.radius * 0.4;
-  ctx.beginPath();
-  ctx.arc(player.x, player.y - offset, offset / 2, 0, Math.PI * 2);
-  ctx.fillStyle = "#1976D2";
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.arc(player.x - offset, player.y + offset, offset / 2, 0, Math.PI * 2);
-  ctx.fillStyle = "#388E3C";
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.arc(player.x + offset, player.y + offset, offset / 2, 0, Math.PI * 2);
-  ctx.fillStyle = "#8E24AA";
-  ctx.fill();
-
-  for (let platform of platforms) {
-    drawPyramidPlatform(
-      platform.x,
-      platform.y,
-      platform.width,
-      platform.height
-    );
-  }
-
-  if (flashDuration > 0) {
-    ctx.fillStyle = "red";
-    flashDuration -= 0.02;
-  } else {
-    ctx.fillStyle = "#50C878";
-  }
-
-  const BASE_SCREEN_WIDTH = 2560;
-  const BASE_SCREEN_HEIGHT = 1600;
-  const BASE_FONT_SIZE = 55;
-
-  //  scale factors
-  let widthScaleFactor = window.innerWidth / BASE_SCREEN_WIDTH;
-  let heightScaleFactor = window.innerHeight / BASE_SCREEN_HEIGHT;
-
-  // average of the width and height scale factors as the overall scale factor
-  let overallScaleFactor = (widthScaleFactor + heightScaleFactor) / 2;
-
-  // Calculate responsive font size
-  let responsiveFontSize = BASE_FONT_SIZE * overallScaleFactor;
-
-  // Set font, stroke, and shadow effects
-  ctx.font = `${responsiveFontSize}px "Press Start 2P"`; // Responsive Font
-  ctx.strokeStyle = "#FFC300"; // cool stroke effect 
-  ctx.lineWidth = 2; // Define the width of the stroke
-
-  // Add a glow effect (only when not flashing)
-  if (flashDuration <= 0) {
-    ctx.shadowColor = ""; // Choose a color for the glow
-    ctx.shadowBlur = 10; // Define the size of the glow
-    ctx.shadowOffsetX = 0; // Horizontal offset
-    ctx.shadowOffsetY = 0; // Vertical offset
-  }
-
-  ctx.fillText(`Score: ${score}`, 15, 45);
-  ctx.strokeText(`Score: ${score}`, 15, 45);
-
-  ctx.shadowBlur = 0;
-}
-
-createPlatform();
-update();
-
-document
-  .getElementById("closeInstructions")
-  .addEventListener("click", function () {
-    document.getElementById("instructions").style.display = "none";
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(name => button.addEventListener(name, release));
+    button.addEventListener('contextmenu', event => event.preventDefault());
   });
+  startButton.addEventListener('click', () => { heldCodes.clear(); setRunning(true); startButton.blur(); });
+  pauseButton.addEventListener('click', () => { heldCodes.clear(); setRunning(!running); pauseButton.blur(); });
+  document.getElementById('restartButton').addEventListener('click', event => {
+    reset(game); heldCodes.clear(); setRunning(true); event.currentTarget.blur();
+  });
+  function autoPause() { heldCodes.clear(); if (running) setRunning(false); }
+  window.addEventListener('blur', autoPause);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) autoPause(); });
+  new ResizeObserver(resize).observe(canvas);
+  window.addEventListener('resize', resize);
+  resize();
+})();
