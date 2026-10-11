@@ -13,7 +13,7 @@
     g.camera = 0;
     g.score = 0;
     g.jumpBuffer = 0;
-    g.platforms = [{ x: 0, y: 674, width: WIDTH, touched: true }];
+    g.platforms = [{ x: 0, y: 674, width: WIDTH, scored: true }];
     extend(g);
   }
   function extend(g) {
@@ -23,9 +23,15 @@
       const center = last.x + last.width / 2;
       const direction = g.random() < .5 ? -1 : 1;
       const x = clamp(center + direction * (65 + g.random() * 65) - width / 2, 18, WIDTH - width - 18);
-      last = { x, y: last.y - 88 - g.random() * 26, width, touched: false };
+      last = { x, y: last.y - 88 - g.random() * 26, width, scored: false };
       g.platforms.push(last);
     }
+  }
+  function awardPlatform(g, platform) {
+    if (platform.scored) return;
+    platform.scored = true;
+    g.score++;
+    g.best = Math.max(g.best, g.score);
   }
   function jump(g) { g.jumpBuffer = .12; }
   function update(g, axis, dt = STEP) {
@@ -48,6 +54,14 @@
     p.vy += 1550 * dt;
     p.y += p.vy * dt;
     p.grounded = false;
+    // Award each platform once when the player's feet rise past its height,
+    // regardless of horizontal overlap or whether the player lands on it.
+    if (p.vy < 0) {
+      const bottom = p.y + p.radius;
+      for (const platform of g.platforms) {
+        if (oldBottom >= platform.y && bottom <= platform.y) awardPlatform(g, platform);
+      }
+    }
     if (p.vy >= 0) {
       // Platforms are ordered from bottom to top; check the first crossed surface.
       for (let i = g.platforms.length - 1; i >= 0; i--) {
@@ -61,11 +75,7 @@
         p.vy = 0;
         p.jumps = 0;
         p.grounded = true;
-        if (!platform.touched) {
-          platform.touched = true;
-          g.score++;
-          g.best = Math.max(g.best, g.score);
-        }
+        awardPlatform(g, platform);
         break;
       }
     }

@@ -20,14 +20,14 @@ test('physics produces identical motion at 30, 60, and 144 Hz render rates', () 
 });
 test('crossed platforms catch fast falls and award points only once', () => {
   const g = createGame(() => .5);
-  g.platforms = [{ x: 100, y: 400, width: 100, touched: false }];
+  g.platforms = [{ x: 100, y: 400, width: 100, scored: false }];
   Object.assign(g.player, { x: 150, y: 360, vy: 4000, grounded: false });
   update(g, 0); assert.equal(g.player.y, 384); assert.equal(g.score, 1);
   update(g, 0); assert.equal(g.score, 1); assert.equal(g.player.jumps, 0);
 });
 test('falling alongside a platform cannot snap the player onto its top', () => {
   const g = createGame(() => .5);
-  g.platforms = [{ x: 100, y: 400, width: 100, touched: false }];
+  g.platforms = [{ x: 100, y: 400, width: 100, scored: false }];
   Object.assign(g.player, { x: 150, y: 405, vy: 100, grounded: false });
   update(g, 0); assert.equal(g.score, 0); assert.ok(g.player.y > 405);
 });
@@ -66,4 +66,48 @@ test('second jump uses the original random 10-to-17 strength relative to the fir
     jump(g); update(g, 0);
     assert.ok(g.player.vy > afterSecond);
   }
+});
+
+
+test('double-jumping past platforms scores without any horizontal contact', () => {
+  const g = createGame(() => .5);
+  const lower = { x: 350, y: 580, width: 100, scored: false };
+  const upper = { x: 350, y: 480, width: 100, scored: false };
+  g.platforms = [{ x: 0, y: 674, width: WIDTH, scored: true }, lower, upper];
+  g.player.x = 50;
+  jump(g);
+  for (let i = 0; i < 40; i++) update(g, 0);
+  assert.equal(lower.scored, true);
+  assert.equal(upper.scored, false);
+  assert.equal(g.score, 1);
+  jump(g);
+  for (let i = 0; i < 50; i++) update(g, 0);
+  assert.equal(upper.scored, true);
+  assert.equal(g.score, 2);
+  assert.equal(g.best, 2);
+  assert.equal(g.player.grounded, false);
+});
+
+test('one upward step can award multiple crossed heights but not an unreached platform', () => {
+  const g = createGame(() => .5);
+  const platforms = [600, 590, 500].map(y => ({ x: 350, y, width: 100, scored: false }));
+  g.platforms = platforms;
+  Object.assign(g.player, { x: 50, y: 600, vy: -4000, grounded: false });
+  update(g, 0);
+  assert.equal(g.score, 2);
+  assert.equal(platforms[2].scored, false);
+});
+
+test('landing, falling past, and recrossing a scored height never award it twice', () => {
+  const g = createGame(() => .5);
+  const platform = { x: 100, y: 500, width: 100, scored: false };
+  g.platforms = [platform];
+  Object.assign(g.player, { x: 50, y: 485, vy: -300, grounded: false });
+  update(g, 0); assert.equal(g.score, 1);
+  Object.assign(g.player, { x: 150, y: 480, vy: 800, grounded: false });
+  update(g, 0); assert.equal(g.player.grounded, true); assert.equal(g.score, 1);
+  Object.assign(g.player, { x: 50, y: 485, vy: -300, grounded: false });
+  update(g, 0); assert.equal(g.score, 1);
+  Object.assign(g.player, { x: 50, y: 480, vy: 800, grounded: false });
+  update(g, 0); assert.equal(g.score, 1);
 });

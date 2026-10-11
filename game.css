@@ -98,3 +98,6 @@ canvas:focus-visible { outline: 3px solid #50c878; outline-offset: -4px; }
 @media (max-height: 520px) { .card { padding: 16px; } .card h1 { font-size: 26px; margin-bottom: 10px; } #controlHint { margin: 8px 0; } }
 
 .game-motto { font-size: 11px; color: #416581; letter-spacing: .02em; font-weight: 400; }
+
+/* Disable browser zoom gestures across the game, including empty control margins. */
+html, body { touch-action: none; overscroll-behavior: none; }
