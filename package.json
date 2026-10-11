@@ -3,6 +3,7 @@
     "fontawesome": "^5.6.3"
   },
   "scripts": {
-    "test": "node --test game-core.test.cjs"
+    "test": "node --test game-core.test.cjs",
+    "prepare-deploy": "node scripts/version-assets.cjs"
   }
 }
